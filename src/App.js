@@ -1,28 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+export default class App extends Component {
+
+  componentDidMount() {
+    function hasGetUserMedia() {
+      return !!(navigator.mediaDevices &&
+        navigator.mediaDevices.getUserMedia);
+    }
+
+    hasGetUserMedia();
+
+    if (hasGetUserMedia()) {
+      // Good to go!
+    } else {
+      alert('getUserMedia() is not supported by your browser');
+    }
+
+    const constraints = {
+      video: true
+    };
+
+    const video = document.querySelector('video');
+
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream) => {video.srcObject = stream});
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <input type="file" accept="video/*;capture=camcorder" />
+        <video autoPlay></video>
       </div>
     );
   }
 }
-
-export default App;
